@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Xavage Designs</title>
+<style>
+  html, body {
+    margin: 0;
+    padding: 0;
+    background: #000;
+    width: 100%;
+  }
+
+  .site-image-container {
+    position: relative;
+    width: 100%;
+    max-width: 1440px;
+    margin: 0 auto;
+    line-height: 0; /* prevents extra space under image */
+  }
+
+  .site-image-container img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+
+  /* ==========================================================
+     HIRE NOW URL — change this single variable to update the link
+     ========================================================== */
+  /* See <a id="hire-now-link"> below; edit its href attribute. */
+
+  #hire-now-link {
+    position: absolute;
+    /* Precise proportional position of the existing "Hire now"
+       button within the source image (1440 x 3000 px). */
+    left: 52.7778%;   /* 760 / 1440 */
+    top: 17.4%;       /* 522 / 3000 */
+    width: 17.4306%;  /* 251 / 1440 */
+    height: 2.1667%;  /* 65 / 3000 */
+
+    background: transparent;
+    border: none;
+    border-radius: 14%; /* matches the button's refined rounded-corner shape */
+    cursor: pointer;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    transition: box-shadow 0.4s ease-in-out;
+  }
+
+  #hire-now-link:hover {
+    box-shadow:
+      0 0 8px 1px rgba(255, 255, 255, 0.3),
+      0 0 16px 4px rgba(255, 255, 255, 0.2),
+      0 0 28px 8px rgba(255, 255, 255, 0.12);
+  }
+</style>
+</head>
+<body>
+
+  <div class="site-image-container">
+    <img src="Portfolio.jpg" alt="Xavage Designs Portfolio">
+    <a id="hire-now-link" href="https://www.fiverr.com/s/VrR3w9x"></a> target="_blank" rel="noopener noreferrer" aria-label="Hire now"></a>
+  </div>
+
+</body>
+</html>
