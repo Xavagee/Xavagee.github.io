@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Xavage Designs</title>
 <style>
+  * { box-sizing: border-box; }
+
   html, body {
     margin: 0;
     padding: 0;
@@ -12,56 +14,193 @@
     width: 100%;
   }
 
-  .site-image-container {
-    position: relative;
+  .site {
     width: 100%;
     max-width: 1440px;
     margin: 0 auto;
-    line-height: 0; /* prevents extra space under image */
   }
 
-  .site-image-container img {
+  /* ---------- flat image sections (untouched original design) ---------- */
+
+  .site img.full-bleed {
     display: block;
     width: 100%;
     height: auto;
   }
 
-  /* ==========================================================
-     HIRE NOW URL — change this single variable to update the link
-     ========================================================== */
-  /* See <a id="hire-now-link"> below; edit its href attribute. */
-
-  #hire-now-link {
-    position: absolute;
-    /* Precise proportional position of the existing "Hire now"
-       button within the source image (1440 x 3000 px). */
-    left: 52.7778%;   /* 760 / 1440 */
-    top: 17.4%;       /* 522 / 3000 */
-    width: 17.4306%;  /* 251 / 1440 */
-    height: 2.1667%;  /* 65 / 3000 */
-
-    background: transparent;
-    border: none;
-    border-radius: 14%; /* matches the button's refined rounded-corner shape */
-    cursor: pointer;
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-    transition: box-shadow 0.4s ease-in-out;
+  .hero-wrap {
+    position: relative;
+    line-height: 0;
   }
 
-  #hire-now-link:hover {
+  /* ==========================================================
+     HIRE NOW — no link/URL. Purely a premium hover interaction
+     over the existing button artwork. Position is proportional
+     to the hero image (1440 x 870) so it stays aligned at any
+     screen size.
+     ========================================================== */
+  #hire-now-btn {
+    position: absolute;
+    left: 52.7778%;   /* 760 / 1440 */
+    top: 60.0%;       /* 522 / 870  */
+    width: 17.4306%;  /* 251 / 1440 */
+    height: 7.4713%;  /* 65 / 870   */
+
+    margin: 0;
+    padding: 0;
+    background: transparent;
+    border: none;
+    border-radius: 14%;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
+    transition: box-shadow 0.45s ease, transform 0.25s ease;
+  }
+
+  #hire-now-btn:hover,
+  #hire-now-btn:focus-visible {
     box-shadow:
-      0 0 8px 1px rgba(255, 255, 255, 0.3),
-      0 0 16px 4px rgba(255, 255, 255, 0.2),
-      0 0 28px 8px rgba(255, 255, 255, 0.12);
+      0 0 8px 1px rgba(255, 255, 255, 0.28),
+      0 0 18px 5px rgba(255, 255, 255, 0.18),
+      0 0 32px 10px rgba(255, 255, 255, 0.10);
+    outline: none;
+  }
+
+  #hire-now-btn:active {
+    transform: scale(0.985);
+  }
+
+  /* ---------- new work section — sits on the black background,
+     starting right where the white boundary section ends ---------- */
+
+  .new-work {
+    background: #000;
+    padding: 56px 0 72px;
+  }
+
+  /* horizontal scroll gallery — lets square, 4:5 and 9:16 pieces
+     sit side by side at a shared height, each keeping its own
+     native aspect ratio (no cropping, no distortion) */
+  .new-work__scroll-wrap {
+    position: relative;
+  }
+
+  .new-work__scroll {
+    display: flex;
+    align-items: flex-end;
+    gap: 14px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding: 0 40px;
+    cursor: grab;
+  }
+
+  .new-work__scroll::-webkit-scrollbar { display: none; }
+  .new-work__scroll:active { cursor: grabbing; }
+
+  .new-work__scroll img {
+    display: block;
+    height: 560px;
+    width: auto;
+    max-width: none;
+    flex: 0 0 auto;
+    border-radius: 4px;
+    scroll-snap-align: start;
+  }
+
+  /* soft edge fades so the gallery reads as continuing off-screen,
+     not cut off — subtle, matches the black background exactly */
+  .new-work__scroll-wrap::before,
+  .new-work__scroll-wrap::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 64px;
+    pointer-events: none;
+    z-index: 2;
+  }
+  .new-work__scroll-wrap::before {
+    left: 0;
+    background: linear-gradient(to right, #000, transparent);
+  }
+  .new-work__scroll-wrap::after {
+    right: 0;
+    background: linear-gradient(to left, #000, transparent);
+  }
+
+  @media (max-width: 900px) {
+    .new-work__scroll img { height: 420px; }
+  }
+
+  @media (max-width: 520px) {
+    .new-work { padding: 40px 0 56px; }
+    .new-work__scroll { gap: 12px; padding: 0 20px; }
+    .new-work__scroll img { height: 300px; }
+    .new-work__scroll-wrap::before,
+    .new-work__scroll-wrap::after { width: 32px; }
   }
 </style>
 </head>
 <body>
 
-  <div class="site-image-container">
-    <img src="Portfolio.jpg" alt="Xavage Designs Portfolio">
-    <a id="hire-now-link" href="https://www.fiverr.com/s/VrR3w9x"></a> target="_blank" rel="noopener noreferrer" aria-label="Hire now"></a>
+  <div class="site">
+
+    <!-- Hero: portrait, name, tagline, Hire now button, "PORTFOLIO 2026" label -->
+    <div class="hero-wrap">
+      <img class="full-bleed" src="hero.jpg" alt="Xavage Designs — Thumbnail Designer, Strategist">
+      <button id="hire-now-btn" type="button" aria-label="Hire now"></button>
+    </div>
+
+    <!-- Existing white portfolio boundary — preserved exactly as-is -->
+    <img class="full-bleed" src="existing-grid.jpg" alt="Portfolio 2026 — selected thumbnail work">
+
+    <!-- New work — added here, on the black background, extending the
+         collection past the white boundary above. Horizontal scroll
+         gallery so square, 4:5, and 9:16 pieces can sit together at a
+         shared height without cropping or distorting any of them. -->
+    <section class="new-work">
+      <div class="new-work__scroll-wrap">
+        <div class="new-work__scroll">
+          <img src="work-01-logo.jpg" alt="Forte Works — brand mark">
+          <img src="work-02-intro.jpg" alt="Forte Works — introducing Forte Works">
+          <img src="work-03-capsule-infinity.jpg" alt="Forte Works — Capsule Infinity">
+          <img src="work-04-cta.jpg" alt="Forte Works — Create Capsule">
+          <img src="work-05-pricing.jpg" alt="Forte Works — Capsule Infinity pricing">
+          <img src="work-06-engagement.jpg" alt="Forte Works — wait for the limit or keep building">
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer: quote and logo -->
+    <img class="full-bleed" src="footer.jpg" alt="Xavage Designs — Thumbnails that matter">
+
   </div>
+
+  <script>
+    // Simple drag-to-scroll for mouse users on the new-work gallery
+    // (touch and trackpad scrolling already work natively).
+    (function () {
+      var track = document.querySelector('.new-work__scroll');
+      if (!track) return;
+      var isDown = false, startX = 0, startScroll = 0;
+
+      track.addEventListener('mousedown', function (e) {
+        isDown = true;
+        startX = e.pageX;
+        startScroll = track.scrollLeft;
+      });
+      window.addEventListener('mouseup', function () { isDown = false; });
+      window.addEventListener('mousemove', function (e) {
+        if (!isDown) return;
+        e.preventDefault();
+        track.scrollLeft = startScroll - (e.pageX - startX);
+      });
+    })();
+  </script>
 
 </body>
 </html>
