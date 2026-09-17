@@ -3,145 +3,445 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Xavage Designs</title>
+<title>Xavage Designs — Creative Designer &amp; Strategist</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
+  :root {
+    --space-section: 96px;
+    --space-section-mobile: 56px;
+    --ink: #141414;
+  }
+
   * { box-sizing: border-box; }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-behavior: smooth;
+  }
 
   html, body {
     margin: 0;
     padding: 0;
     background: #000;
     width: 100%;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   }
 
   .site {
     width: 100%;
     max-width: 1440px;
     margin: 0 auto;
+    overflow-x: hidden;
   }
 
-  /* ---------- flat image sections (untouched original design) ---------- */
+  img {
+    -webkit-user-drag: none;
+    user-select: none;
+  }
 
-  .site img.full-bleed {
+  .full-bleed {
     display: block;
     width: 100%;
     height: auto;
   }
 
-  .hero-wrap {
+  /* ==========================================================
+     HERO — real markup (not a flat image) so the portrait, title,
+     tagline and CTA can each move independently: staggered entrance,
+     subtle mouse parallax on desktop, and a gentle scroll fade.
+     ========================================================== */
+
+  .hero {
     position: relative;
-    line-height: 0;
+    background: #000;
+    overflow: hidden;
+    padding: 108px 64px 96px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 72px;
   }
 
-  /* ==========================================================
-     HIRE NOW — no link/URL. Purely a premium hover interaction
-     over the existing button artwork. Position is proportional
-     to the hero image (1440 x 870) so it stays aligned at any
-     screen size.
-     ========================================================== */
-  #hire-now-btn {
-    position: absolute;
-    left: 52.7778%;   /* 760 / 1440 */
-    top: 60.0%;       /* 522 / 870  */
-    width: 17.4306%;  /* 251 / 1440 */
-    height: 7.4713%;  /* 65 / 870   */
+  .hero__portrait-wrap {
+    position: relative;
+    flex: 0 0 auto;
+    width: 300px;
+    height: 300px;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: heroPortraitIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.1s;
+    will-change: transform;
+  }
 
+  .hero__portrait-ring {
+    position: absolute;
+    inset: -14px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.16);
+  }
+
+  .hero__portrait-ring::before {
+    content: "";
+    position: absolute;
+    inset: 7px;
+    border-radius: 50%;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+  }
+
+  .hero__portrait {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.75);
+  }
+
+  .hero__portrait-parallax {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+  }
+
+  .hero__text {
+    position: relative;
+    flex: 0 1 auto;
+    max-width: 620px;
+    transition: transform 0.2s ease-out;
+    will-change: transform;
+  }
+
+  .hero__title {
     margin: 0;
-    padding: 0;
-    background: transparent;
+    color: #fff;
+    font-weight: 700;
+    font-size: clamp(2.6rem, 4.6vw, 4.5rem);
+    line-height: 1.02;
+    letter-spacing: -0.03em;
+    opacity: 0;
+    transform: translateY(26px);
+    animation: heroTextIn 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.32s;
+    will-change: transform;
+  }
+
+  .hero__tagline {
+    margin: 18px 0 0;
+    color: rgba(255, 255, 255, 0.62);
+    font-weight: 300;
+    font-size: clamp(1rem, 1.3vw, 1.2rem);
+    letter-spacing: 0.01em;
+    opacity: 0;
+    transform: translateY(18px);
+    animation: heroTextIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.52s;
+  }
+
+  @keyframes heroPortraitIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes heroTextIn {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* HIRE NOW — rebuilt as a real button so it can carry its own
+     staggered entrance and a refined hover lift + glow. */
+  #hire-now-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin: 34px 0 0;
+    padding: 15px 36px;
+    background: #f7f6f3;
+    color: #1c1c1c;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.01em;
     border: none;
-    border-radius: 14%;
+    border-radius: 999px;
     cursor: pointer;
     -webkit-appearance: none;
     appearance: none;
-    box-shadow: 0 0 0 0 rgba(255, 255, 255, 0);
-    transition: box-shadow 0.45s ease, transform 0.25s ease;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: heroTextIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.68s;
+    box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 10px 24px -12px rgba(0, 0, 0, 0.5);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
+                box-shadow 0.45s ease;
   }
 
   #hire-now-btn:hover,
   #hire-now-btn:focus-visible {
+    transform: translateY(-3px);
     box-shadow:
-      0 0 8px 1px rgba(255, 255, 255, 0.28),
-      0 0 18px 5px rgba(255, 255, 255, 0.18),
-      0 0 32px 10px rgba(255, 255, 255, 0.10);
+      0 1px 0 rgba(255, 255, 255, 0.5) inset,
+      0 16px 32px -14px rgba(0, 0, 0, 0.55),
+      0 0 0 1px rgba(255, 255, 255, 0.06),
+      0 0 24px 4px rgba(255, 255, 255, 0.16);
     outline: none;
   }
 
   #hire-now-btn:active {
-    transform: scale(0.985);
+    transform: translateY(-1px) scale(0.98);
   }
 
-  /* ---------- new work section — sits on the black background,
-     starting right where the white boundary section ends ---------- */
+  @media (max-width: 860px) {
+    .hero {
+      flex-direction: column;
+      text-align: center;
+      padding: 88px 28px 72px;
+      gap: 32px;
+    }
+    .hero__portrait-wrap {
+      width: 168px;
+      height: 168px;
+    }
+    .hero__text {
+      max-width: 480px;
+    }
+  }
 
-  .new-work {
+  @media (max-width: 400px) {
+    .hero {
+      padding: 72px 20px 56px;
+    }
+    .hero__portrait-wrap {
+      width: 136px;
+      height: 136px;
+    }
+  }
+
+  /* ---------- shared section heading pattern (kicker + title + divider),
+     used identically for both collections so the hierarchy reads the
+     same way twice: label, name, work. ---------- */
+
+  .section-divider {
+    width: 0;
+    max-width: 44px;
+    height: 2px;
+    border-radius: 2px;
+    margin: 0 auto 28px;
+    background: rgba(255, 255, 255, 0.22);
+    transition: width 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .section-heading.in-view .section-divider {
+    width: 44px;
+  }
+
+  .section-divider--dark {
+    background: rgba(0, 0, 0, 0.15);
+  }
+
+  .section-kicker {
+    text-align: center;
+    font-weight: 700;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(8px);
+    transition: opacity 0.6s ease 0.12s, transform 0.6s ease 0.12s;
+  }
+
+  .section-heading.in-view .section-kicker {
+    opacity: 0.6;
+    transform: translateY(0);
+  }
+
+  .section-kicker--dark {
+    color: var(--ink);
+  }
+
+  .section-heading.in-view .section-kicker--dark {
+    opacity: 0.5;
+  }
+
+  .section-title {
+    text-align: center;
+    font-weight: 600;
+    font-size: 28px;
+    letter-spacing: -0.01em;
+    margin: 0 0 60px;
+    color: #fff;
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.65s ease 0.22s, transform 0.65s ease 0.22s;
+  }
+
+  .section-heading.in-view .section-title {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .section-title--dark {
+    color: var(--ink);
+  }
+
+  /* ---------- posters — selected poster designs, responsive 2-up grid ---------- */
+
+  .project {
     background: #000;
-    padding: 56px 0 72px;
+    padding: var(--space-section) 20px;
   }
 
-  /* horizontal scroll gallery — lets square, 4:5 and 9:16 pieces
-     sit side by side at a shared height, each keeping its own
-     native aspect ratio (no cropping, no distortion) */
-  .new-work__scroll-wrap {
-    position: relative;
+  .project__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: start;
+    gap: 28px;
+    max-width: 960px;
+    margin: 0 auto;
   }
 
-  .new-work__scroll {
-    display: flex;
-    align-items: flex-end;
-    gap: 14px;
-    overflow-x: auto;
-    scroll-snap-type: x proximity;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none;
-    padding: 0 40px;
-    cursor: grab;
-  }
-
-  .new-work__scroll::-webkit-scrollbar { display: none; }
-  .new-work__scroll:active { cursor: grabbing; }
-
-  .new-work__scroll img {
+  .project__grid img {
     display: block;
-    height: 560px;
-    width: auto;
-    max-width: none;
-    flex: 0 0 auto;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease,
+                transform 0.4s ease, filter 0.4s ease;
+    will-change: transform;
+  }
+
+  .project__grid img.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .project__grid img:nth-child(even) {
+    transition-delay: 0.08s;
+  }
+
+  .project__grid img:hover {
+    transform: scale(1.01);
+    filter: brightness(1.04);
+    transition: transform 0.4s ease, filter 0.4s ease;
+  }
+
+  @media (max-width: 680px) {
+    .project__grid {
+      grid-template-columns: 1fr;
+      gap: 22px;
+    }
+  }
+
+  /* ---------- thumbnails — selected YouTube thumbnail designs.
+     Tight 2-column grid matching the original thumbnail-specific
+     reference design: minimal gaps, white background. Drop future
+     <img> tags straight into .thumbnails__grid to extend it. ---------- */
+
+  .thumbnails {
+    background: #fff;
+    padding: var(--space-section) 20px;
+  }
+
+  .thumbnails__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    max-width: 1360px;
+    margin: 0 auto;
+  }
+
+  .thumbnails__grid img {
+    display: block;
+    width: 100%;
+    height: auto;
     border-radius: 4px;
-    scroll-snap-align: start;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease,
+                transform 0.4s ease, box-shadow 0.4s ease;
   }
 
-  /* soft edge fades so the gallery reads as continuing off-screen,
-     not cut off — subtle, matches the black background exactly */
-  .new-work__scroll-wrap::before,
-  .new-work__scroll-wrap::after {
-    content: "";
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    width: 64px;
-    pointer-events: none;
-    z-index: 2;
-  }
-  .new-work__scroll-wrap::before {
-    left: 0;
-    background: linear-gradient(to right, #000, transparent);
-  }
-  .new-work__scroll-wrap::after {
-    right: 0;
-    background: linear-gradient(to left, #000, transparent);
+  .thumbnails__grid img.in-view {
+    opacity: 1;
+    transform: translateY(0);
   }
 
-  @media (max-width: 900px) {
-    .new-work__scroll img { height: 420px; }
+  .thumbnails__grid img:nth-child(even) {
+    transition-delay: 0.08s;
   }
 
-  @media (max-width: 520px) {
-    .new-work { padding: 40px 0 56px; }
-    .new-work__scroll { gap: 12px; padding: 0 20px; }
-    .new-work__scroll img { height: 300px; }
-    .new-work__scroll-wrap::before,
-    .new-work__scroll-wrap::after { width: 32px; }
+  .thumbnails__grid img:hover {
+    transform: scale(1.01);
+    box-shadow: 0 16px 34px -12px rgba(0, 0, 0, 0.28);
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  @media (max-width: 680px) {
+    .thumbnails__grid {
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+  }
+
+  @media (max-width: 680px) {
+    :root {
+      --space-section: var(--space-section-mobile);
+    }
+    .section-title {
+      font-size: 22px;
+      margin-bottom: 40px;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .project__grid img,
+    .thumbnails__grid img {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
+    #hire-now-btn {
+      transition: none;
+      opacity: 1;
+      transform: none;
+      animation: none;
+    }
+    .hero__portrait-wrap,
+    .hero__title,
+    .hero__tagline {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+    .hero__portrait-parallax,
+    .hero__text {
+      transition: none;
+    }
+    .section-divider {
+      transition: none;
+      width: 44px;
+    }
+    .section-kicker {
+      transition: none;
+      opacity: 0.6;
+      transform: none;
+    }
+    .section-kicker--dark {
+      opacity: 0.5;
+    }
+    .section-title {
+      transition: none;
+      opacity: 1;
+      transform: none;
+    }
   }
 </style>
 </head>
@@ -149,56 +449,156 @@
 
   <div class="site">
 
-    <!-- Hero: portrait, name, tagline, Hire now button, "PORTFOLIO 2026" label -->
-    <div class="hero-wrap">
-      <img class="full-bleed" src="hero.jpg" alt="Xavage Designs — Thumbnail Designer, Strategist">
-      <button id="hire-now-btn" type="button" aria-label="Hire now"></button>
-    </div>
-
-    <!-- Existing white portfolio boundary — preserved exactly as-is -->
-    <img class="full-bleed" src="existing-grid.jpg" alt="Portfolio 2026 — selected thumbnail work">
-
-    <!-- New work — added here, on the black background, extending the
-         collection past the white boundary above. Horizontal scroll
-         gallery so square, 4:5, and 9:16 pieces can sit together at a
-         shared height without cropping or distorting any of them. -->
-    <section class="new-work">
-      <div class="new-work__scroll-wrap">
-        <div class="new-work__scroll">
-          <img src="work-01-logo.jpg" alt="Forte Works — brand mark">
-          <img src="work-02-intro.jpg" alt="Forte Works — introducing Forte Works">
-          <img src="work-03-capsule-infinity.jpg" alt="Forte Works — Capsule Infinity">
-          <img src="work-04-cta.jpg" alt="Forte Works — Create Capsule">
-          <img src="work-05-pricing.jpg" alt="Forte Works — Capsule Infinity pricing">
-          <img src="work-06-engagement.jpg" alt="Forte Works — wait for the limit or keep building">
+    <!-- Hero: real markup — portrait, name, tagline, Hire now button —
+         so each element can animate independently (staggered entrance,
+         subtle parallax) rather than being baked into one flat image. -->
+    <section class="hero">
+      <div class="hero__portrait-wrap">
+        <div class="hero__portrait-parallax" data-parallax="portrait">
+          <div class="hero__portrait-ring"></div>
+          <img class="hero__portrait" src="portrait.png" alt="Portrait photo, Xavage Designs">
         </div>
+      </div>
+      <div class="hero__text" data-parallax="text">
+        <h1 class="hero__title">Xavage Designs</h1>
+        <p class="hero__tagline">Creative Designer &amp; Strategist</p>
+        <button id="hire-now-btn" type="button">Hire now</button>
       </div>
     </section>
 
-    <!-- Footer: quote and logo -->
-    <img class="full-bleed" src="footer.jpg" alt="Xavage Designs — Thumbnails that matter">
+    <!-- Posters — Selected Poster Designs, shown as a responsive 2-up
+         gallery grid. Add future posters as an <img class="reveal">
+         straight into .project__grid; layout, reveal and hover carry
+         over automatically. Displayed first, ahead of the thumbnails. -->
+    <section class="project">
+      <div class="section-heading">
+        <div class="section-divider"></div>
+        <p class="section-kicker">Posters</p>
+        <h2 class="section-title">Selected Poster Designs</h2>
+      </div>
+      <div class="project__grid">
+        <img class="reveal" src="project-01-logo.jpg" width="1080" height="1080" loading="lazy" alt="Forte Works — brand mark">
+        <img class="reveal" src="project-02-intro.jpg" width="1080" height="1350" loading="lazy" alt="Introducing Forte Works">
+        <img class="reveal" src="project-03-description.jpg" width="1080" height="1350" loading="lazy" alt="Capsule Infinity — a browser extension that lets you save AI conversations as portable capsules">
+        <img class="reveal" src="project-04-title.jpg" width="1080" height="1350" loading="lazy" alt="Capsule Infinity — enhance your browser, extend your world">
+        <img class="reveal" src="project-05-cta.jpg" width="1080" height="1350" loading="lazy" alt="Your conversation, packed into a capsule — Create Capsule">
+        <img class="reveal" src="project-06-guide.jpg" width="1080" height="1350" loading="lazy" alt="Guide to use Capsule Infinity — capture page, new chat, copy and paste">
+        <img class="reveal" src="project-07-crossplatform.jpg" width="1080" height="1350" loading="lazy" alt="Carry your context across Claude, ChatGPT, Gemini, DeepSeek and more">
+        <img class="reveal" src="project-08-chromestore.jpg" width="1080" height="1350" loading="lazy" alt="Use Capsule Infinity — now available on the Chrome Web Store">
+      </div>
+    </section>
+
+    <!-- Thumbnails — the second portfolio collection, laid
+         out to match the original thumbnail-specific reference design
+         exactly: tight 2-column grid, minimal gaps, white background.
+         Add future thumbnails as an <img class="reveal"> straight into
+         .thumbnails__grid; it will inherit spacing, reveal and hover. -->
+    <section class="thumbnails">
+      <div class="section-heading">
+        <div class="section-divider section-divider--dark"></div>
+        <p class="section-kicker section-kicker--dark">Thumbnails</p>
+        <h2 class="section-title section-title--dark">Selected YouTube Thumbnail Designs</h2>
+      </div>
+      <div class="thumbnails__grid">
+        <img class="reveal" src="thumb-01.jpg" width="1920" height="1080" loading="lazy" alt="FIFA World Cup 2026 reaction thumbnail featuring Messi and Lamine Yamal">
+        <img class="reveal" src="thumb-02.jpg" width="1920" height="1080" loading="lazy" alt="Wendy's Meal 99 Minions toy haul thumbnail">
+        <img class="reveal" src="thumb-03.jpg" width="1920" height="1080" loading="lazy" alt="Crumbl Cookies Flamin' Hot Cheetos taste test thumbnail">
+        <img class="reveal" src="thumb-04.jpg" width="1920" height="1080" loading="lazy" alt="Funny dog reaction thumbnail with laughing hosts">
+        <img class="reveal" src="thumb-05.jpg" width="1920" height="1080" loading="lazy" alt="Michael Jackson 55th Grammy Awards thumbnail">
+        <img class="reveal" src="thumb-06.jpg" width="1920" height="1080" loading="lazy" alt="UFC Conor McGregor Rise thumbnail">
+        <img class="reveal" src="thumb-07.jpg" width="1920" height="1080" loading="lazy" alt="Social media side hustle apps reaction thumbnail">
+        <img class="reveal" src="thumb-08.jpg" width="1920" height="1080" loading="lazy" alt="Cristiano Ronaldo Total $100M net worth thumbnail">
+        <img class="reveal" src="thumb-09.jpg" width="1920" height="1080" loading="lazy" alt="9/11 Inside Job or Terrorist Attack conspiracy theory thumbnail">
+        <img class="reveal" src="thumb-10.jpg" width="1080" height="607" loading="lazy" alt="Tupac Shakur They Will Kill Me thumbnail">
+      </div>
+    </section>
+
+    <!-- Footer: quote, preserved exactly from the latest source design -->
+    <img class="full-bleed" src="footer.jpg" alt="Every view begins with one decision: the click.">
 
   </div>
 
   <script>
-    // Simple drag-to-scroll for mouse users on the new-work gallery
-    // (touch and trackpad scrolling already work natively).
+    // Fade/slide reveal for gallery images and section headings as they
+    // scroll into view. Images load natively (src + loading="lazy");
+    // this only toggles animation classes, so content never depends on
+    // JS to appear.
     (function () {
-      var track = document.querySelector('.new-work__scroll');
-      if (!track) return;
-      var isDown = false, startX = 0, startScroll = 0;
+      var imgs = document.querySelectorAll('img.reveal');
+      var headings = document.querySelectorAll('.section-heading');
+      var targets = Array.prototype.slice.call(imgs).concat(Array.prototype.slice.call(headings));
 
-      track.addEventListener('mousedown', function (e) {
-        isDown = true;
-        startX = e.pageX;
-        startScroll = track.scrollLeft;
-      });
-      window.addEventListener('mouseup', function () { isDown = false; });
-      window.addEventListener('mousemove', function (e) {
-        if (!isDown) return;
-        e.preventDefault();
-        track.scrollLeft = startScroll - (e.pageX - startX);
-      });
+      if (!('IntersectionObserver' in window)) {
+        targets.forEach(function (el) { el.classList.add('in-view'); });
+        return;
+      }
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { rootMargin: '0px 0px -60px 0px', threshold: 0.05 });
+
+      targets.forEach(function (el) { observer.observe(el); });
+    })();
+
+    // Hero parallax — subtle mouse-follow (desktop, fine pointer only)
+    // and a gentle scroll-based parallax/fade. Both respect
+    // prefers-reduced-motion by not running at all.
+    (function () {
+      var hero = document.querySelector('.hero');
+      var portrait = document.querySelector('[data-parallax="portrait"]');
+      var text = document.querySelector('[data-parallax="text"]');
+      if (!hero || !portrait || !text) return;
+
+      var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      if (reduceMotion) return;
+
+      var finePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+      var mx = 0, my = 0, scrollProgress = 0, ticking = false;
+
+      function apply() {
+        var pX = mx * 8;
+        var pY = my * 8 + scrollProgress * -14;
+        var tX = mx * 4;
+        var tY = my * 4 + scrollProgress * -26;
+        portrait.style.transform = 'translate3d(' + pX.toFixed(2) + 'px,' + pY.toFixed(2) + 'px,0)';
+        text.style.transform = 'translate3d(' + tX.toFixed(2) + 'px,' + tY.toFixed(2) + 'px,0)';
+        hero.style.opacity = String(Math.max(0.15, 1 - scrollProgress * 0.9));
+        ticking = false;
+      }
+
+      function requestTick() {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(apply);
+        }
+      }
+
+      if (finePointer) {
+        hero.addEventListener('mousemove', function (e) {
+          var rect = hero.getBoundingClientRect();
+          var cx = rect.left + rect.width / 2;
+          var cy = rect.top + rect.height / 2;
+          mx = Math.max(-1, Math.min(1, (e.clientX - cx) / (rect.width / 2)));
+          my = Math.max(-1, Math.min(1, (e.clientY - cy) / (rect.height / 2)));
+          requestTick();
+        });
+        hero.addEventListener('mouseleave', function () {
+          mx = 0; my = 0;
+          requestTick();
+        });
+      }
+
+      window.addEventListener('scroll', function () {
+        var heroHeight = hero.offsetHeight || 1;
+        scrollProgress = Math.max(0, Math.min(1, window.scrollY / heroHeight));
+        requestTick();
+      }, { passive: true });
     })();
   </script>
 
