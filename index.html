@@ -12,6 +12,9 @@
     --space-section: 96px;
     --space-section-mobile: 56px;
     --ink: #141414;
+    --violet-deep: #45118d;
+    --violet: #7c3aed;
+    --violet-soft: #bc88ec;
   }
 
   * { box-sizing: border-box; }
@@ -34,6 +37,7 @@
     max-width: 1440px;
     margin: 0 auto;
     overflow-x: hidden;
+    position: relative;
   }
 
   img {
@@ -47,21 +51,53 @@
     height: auto;
   }
 
+  /* ---------- scroll progress indicator ---------- */
+
+  .scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 2px;
+    width: 0%;
+    background: linear-gradient(90deg, var(--violet-deep), var(--violet-soft));
+    z-index: 999;
+    transition: width 0.1s linear;
+  }
+
   /* ==========================================================
-     HERO — real markup (not a flat image) so the portrait, title,
-     tagline and CTA can each move independently: staggered entrance,
-     subtle mouse parallax on desktop, and a gentle scroll fade.
+     HERO — real markup so the portrait, title, tagline and CTA
+     can each move independently: staggered entrance, subtle
+     mouse parallax on desktop, and a gentle scroll fade.
      ========================================================== */
 
   .hero {
     position: relative;
     background: #000;
     overflow: hidden;
-    padding: 108px 64px 96px;
+    padding: 92px 64px 56px;
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 72px;
+  }
+
+  .hero__glow {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 900px;
+    height: 900px;
+    transform: translate(-50%, -50%);
+    background: radial-gradient(circle, rgba(124, 58, 237, 0.22) 0%, rgba(69, 17, 141, 0.10) 38%, rgba(0, 0, 0, 0) 68%);
+    filter: blur(10px);
+    pointer-events: none;
+    z-index: 0;
+    animation: glowBreathe 9s ease-in-out infinite;
+  }
+
+  @keyframes glowBreathe {
+    0%, 100% { opacity: 0.75; transform: translate(-50%, -50%) scale(1); }
+    50% { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
   }
 
   .hero__portrait-wrap {
@@ -69,6 +105,7 @@
     flex: 0 0 auto;
     width: 300px;
     height: 300px;
+    z-index: 1;
     opacity: 0;
     transform: translateY(18px);
     animation: heroPortraitIn 1s cubic-bezier(0.16, 1, 0.3, 1) forwards;
@@ -91,6 +128,20 @@
     border: 1px solid rgba(255, 255, 255, 0.07);
   }
 
+  .hero__portrait-spin {
+    position: absolute;
+    inset: -26px;
+    border-radius: 50%;
+    border: 1px solid transparent;
+    border-top-color: rgba(188, 136, 236, 0.35);
+    border-right-color: rgba(124, 58, 237, 0.16);
+    animation: ringSpin 50s linear infinite;
+  }
+
+  @keyframes ringSpin {
+    to { transform: rotate(360deg); }
+  }
+
   .hero__portrait {
     position: relative;
     display: block;
@@ -98,7 +149,7 @@
     height: 100%;
     border-radius: 50%;
     object-fit: cover;
-    box-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.75);
+    box-shadow: 0 30px 70px -20px rgba(69, 17, 141, 0.55), 0 30px 60px -20px rgba(0, 0, 0, 0.7);
   }
 
   .hero__portrait-parallax {
@@ -111,6 +162,7 @@
 
   .hero__text {
     position: relative;
+    z-index: 1;
     flex: 0 1 auto;
     max-width: 620px;
     transition: transform 0.2s ease-out;
@@ -143,6 +195,19 @@
     animation-delay: 0.52s;
   }
 
+  .hero__descriptor {
+    margin: 12px 0 0;
+    color: rgba(255, 255, 255, 0.36);
+    font-weight: 400;
+    font-size: 12.5px;
+    letter-spacing: 0.03em;
+    text-wrap: balance;
+    opacity: 0;
+    transform: translateY(14px);
+    animation: heroTextIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    animation-delay: 0.62s;
+  }
+
   @keyframes heroPortraitIn {
     to { opacity: 1; transform: translateY(0); }
   }
@@ -151,14 +216,14 @@
     to { opacity: 1; transform: translateY(0); }
   }
 
-  /* HIRE NOW — rebuilt as a real button so it can carry its own
-     staggered entrance and a refined hover lift + glow. */
+  /* HIRE NOW — real button with a refined hover lift + a soft glow
+     that blends white with a whisper of the portrait's violet. */
   #hire-now-btn {
     position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    margin: 34px 0 0;
+    margin: 30px 0 0;
     padding: 15px 36px;
     background: #f7f6f3;
     color: #1c1c1c;
@@ -174,7 +239,7 @@
     opacity: 0;
     transform: translateY(14px);
     animation: heroTextIn 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
-    animation-delay: 0.68s;
+    animation-delay: 0.74s;
     box-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 10px 24px -12px rgba(0, 0, 0, 0.5);
     transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1),
                 box-shadow 0.45s ease;
@@ -187,7 +252,8 @@
       0 1px 0 rgba(255, 255, 255, 0.5) inset,
       0 16px 32px -14px rgba(0, 0, 0, 0.55),
       0 0 0 1px rgba(255, 255, 255, 0.06),
-      0 0 24px 4px rgba(255, 255, 255, 0.16);
+      0 0 22px 3px rgba(255, 255, 255, 0.14),
+      0 0 34px 10px rgba(124, 58, 237, 0.20);
     outline: none;
   }
 
@@ -195,12 +261,46 @@
     transform: translateY(-1px) scale(0.98);
   }
 
+  .hero__scroll {
+    position: absolute;
+    left: 50%;
+    bottom: 18px;
+    transform: translateX(-50%);
+    z-index: 1;
+    width: 1px;
+    height: 30px;
+    background: linear-gradient(to bottom, rgba(255,255,255,0), rgba(255,255,255,0.28));
+    opacity: 0;
+    animation: heroTextIn 1s ease forwards;
+    animation-delay: 1s;
+  }
+
+  .hero__scroll::after {
+    content: "";
+    position: absolute;
+    left: 50%;
+    top: 0;
+    width: 3px;
+    height: 3px;
+    margin-left: -1.5px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.55);
+    animation: scrollDot 2.2s ease-in-out infinite;
+  }
+
+  @keyframes scrollDot {
+    0% { top: 0; opacity: 0; }
+    20% { opacity: 1; }
+    80% { opacity: 1; }
+    100% { top: 26px; opacity: 0; }
+  }
+
   @media (max-width: 860px) {
     .hero {
       flex-direction: column;
       text-align: center;
-      padding: 88px 28px 72px;
-      gap: 32px;
+      padding: 76px 28px 72px;
+      gap: 26px;
     }
     .hero__portrait-wrap {
       width: 168px;
@@ -209,11 +309,19 @@
     .hero__text {
       max-width: 480px;
     }
+    .hero__glow {
+      width: 560px;
+      height: 560px;
+    }
   }
 
   @media (max-width: 400px) {
     .hero {
-      padding: 72px 20px 56px;
+      padding: 64px 20px 68px;
+    }
+    .hero__descriptor {
+      font-size: 11.5px;
+      letter-spacing: 0.02em;
     }
     .hero__portrait-wrap {
       width: 136px;
@@ -221,9 +329,7 @@
     }
   }
 
-  /* ---------- shared section heading pattern (kicker + title + divider),
-     used identically for both collections so the hierarchy reads the
-     same way twice: label, name, work. ---------- */
+  /* ---------- shared section heading pattern (kicker + title + divider) ---------- */
 
   .section-divider {
     width: 0;
@@ -290,18 +396,43 @@
     color: var(--ink);
   }
 
+  .section-title--tight {
+    margin-bottom: 0;
+  }
+
+  /* ---------- selected work — compact editorial intro ---------- */
+
+  .intro {
+    background: #000;
+    padding: 64px 20px 8px;
+    text-align: center;
+  }
+
+  .intro__blurb {
+    max-width: 480px;
+    margin: 0 auto;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+    font-size: 15px;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 680px) {
+    .intro { padding: 44px 20px 0; }
+  }
+
   /* ---------- posters — selected poster designs, responsive 2-up grid ---------- */
 
   .project {
     background: #000;
-    padding: var(--space-section) 20px;
+    padding: 48px 20px var(--space-section);
   }
 
   .project__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
     align-items: start;
-    gap: 28px;
+    gap: 32px;
     max-width: 960px;
     margin: 0 auto;
   }
@@ -312,9 +443,9 @@
     height: auto;
     border-radius: 10px;
     opacity: 0;
-    transform: translateY(20px);
-    transition: opacity 0.7s ease, transform 0.7s ease,
-                transform 0.4s ease, filter 0.4s ease;
+    transform: translateY(24px);
+    transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1),
+                transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
     will-change: transform;
   }
 
@@ -323,31 +454,127 @@
     transform: translateY(0);
   }
 
-  .project__grid img:nth-child(even) {
-    transition-delay: 0.08s;
-  }
+  .project__grid img:nth-child(2n) { transition-delay: 0.1s; }
+  .project__grid img:nth-child(4n+1),
+  .project__grid img:nth-child(4n) { transition-delay: 0s; }
 
   .project__grid img:hover {
     transform: scale(1.01);
     filter: brightness(1.04);
-    transition: transform 0.4s ease, filter 0.4s ease;
+    transition: transform 0.45s ease, filter 0.45s ease;
   }
 
   @media (max-width: 680px) {
     .project__grid {
       grid-template-columns: 1fr;
-      gap: 22px;
+      gap: 24px;
     }
   }
 
-  /* ---------- thumbnails — selected YouTube thumbnail designs.
-     Tight 2-column grid matching the original thumbnail-specific
-     reference design: minimal gaps, white background. Drop future
-     <img> tags straight into .thumbnails__grid to extend it. ---------- */
+  /* ---------- what i do — minimal 3-column, typographic only ---------- */
+
+  .whatido {
+    background: #000;
+    padding: var(--space-section) 20px;
+  }
+
+  .whatido__grid {
+    max-width: 1040px;
+    margin: 52px auto 0;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+  }
+
+  .whatido__item {
+    padding: 0 36px;
+    border-left: 1px solid rgba(255, 255, 255, 0.09);
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .whatido__item.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .whatido__item:nth-child(1) { transition-delay: 0s; }
+  .whatido__item:nth-child(2) { transition-delay: 0.1s; }
+  .whatido__item:nth-child(3) { transition-delay: 0.2s; }
+
+  .whatido__index {
+    display: inline-block;
+    color: rgba(255, 255, 255, 0.3);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    margin-bottom: 14px;
+    position: relative;
+    padding-bottom: 10px;
+  }
+
+  .whatido__index::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 1px;
+    width: 0;
+    background: var(--violet-soft);
+    transition: width 0.7s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+  }
+
+  .whatido__item.in-view .whatido__index::after {
+    width: 22px;
+  }
+
+  .whatido__item h3 {
+    margin: 0 0 10px;
+    color: #fff;
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+
+  .whatido__item p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 780px) {
+    .whatido__grid {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+    .whatido__item {
+      border-left: none;
+      border-top: 1px solid rgba(255, 255, 255, 0.09);
+      padding: 28px 8px 0;
+      text-align: center;
+    }
+    .whatido__index::after {
+      left: 50%;
+      transform: translateX(-50%);
+    }
+  }
+
+  /* ---------- thumbnails — selected YouTube thumbnail designs ---------- */
 
   .thumbnails {
     background: #fff;
     padding: var(--space-section) 20px;
+  }
+
+  .thumbnails-intro {
+    text-align: center;
+    padding-bottom: 8px;
+  }
+
+  .thumbnails-intro .intro__blurb {
+    color: rgba(20, 20, 20, 0.5);
   }
 
   .thumbnails__grid {
@@ -355,33 +582,60 @@
     grid-template-columns: 1fr 1fr;
     gap: 12px;
     max-width: 1360px;
-    margin: 0 auto;
+    margin: 40px auto 0;
   }
 
-  .thumbnails__grid img {
+  .thumbnails__item {
+    position: relative;
     display: block;
-    width: 100%;
-    height: auto;
+    overflow: hidden;
     border-radius: 4px;
     opacity: 0;
     transform: translateY(20px);
-    transition: opacity 0.7s ease, transform 0.7s ease,
-                transform 0.4s ease, box-shadow 0.4s ease;
+    transition: opacity 0.7s ease, transform 0.7s ease;
   }
 
-  .thumbnails__grid img.in-view {
+  .thumbnails__item.in-view {
     opacity: 1;
     transform: translateY(0);
   }
 
-  .thumbnails__grid img:nth-child(even) {
+  .thumbnails__item:nth-child(even) {
     transition-delay: 0.08s;
   }
 
-  .thumbnails__grid img:hover {
+  .thumbnails__item img {
+    display: block;
+    width: 100%;
+    height: auto;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s ease;
+  }
+
+  .thumbnails__item:hover img {
     transform: scale(1.01);
     box-shadow: 0 16px 34px -12px rgba(0, 0, 0, 0.28);
-    transition: transform 0.4s ease, box-shadow 0.4s ease;
+  }
+
+  .thumbnails__view {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    padding: 5px 10px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #141414;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    border-radius: 999px;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    pointer-events: none;
+  }
+
+  .thumbnails__item:hover .thumbnails__view {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   @media (max-width: 680px) {
@@ -389,6 +643,229 @@
       grid-template-columns: 1fr;
       gap: 18px;
     }
+  }
+
+  /* ---------- design with purpose — 3-step process ---------- */
+
+  .process {
+    background: #000;
+    padding: var(--space-section) 20px;
+  }
+
+  .process__grid {
+    max-width: 980px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 40px;
+  }
+
+  .process__step {
+    opacity: 0;
+    transform: translateY(18px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+
+  .process__step.in-view {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .process__step:nth-child(1) { transition-delay: 0s; }
+  .process__step:nth-child(2) { transition-delay: 0.1s; }
+  .process__step:nth-child(3) { transition-delay: 0.2s; }
+
+  .process__num {
+    display: block;
+    color: var(--violet-soft);
+    opacity: 0.85;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    margin-bottom: 14px;
+  }
+
+  .process__step h3 {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.88);
+    font-size: 18px;
+    font-weight: 400;
+    line-height: 1.45;
+    letter-spacing: -0.005em;
+  }
+
+  .process__step p {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-size: 14px;
+    font-weight: 300;
+    line-height: 1.6;
+  }
+
+  @media (max-width: 780px) {
+    .process__grid {
+      grid-template-columns: 1fr;
+      gap: 32px;
+      text-align: center;
+    }
+  }
+
+  /* ---------- let's connect — closing CTA ---------- */
+
+  .connect {
+    position: relative;
+    background: #000;
+    overflow: hidden;
+    padding: var(--space-section) 20px;
+    text-align: center;
+  }
+
+  .connect__glow {
+    position: absolute;
+    bottom: -220px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 800px;
+    height: 500px;
+    background: radial-gradient(ellipse, rgba(124, 58, 237, 0.16) 0%, rgba(69, 17, 141, 0.06) 45%, rgba(0,0,0,0) 72%);
+    filter: blur(6px);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .connect__inner {
+    position: relative;
+    z-index: 1;
+  }
+
+  .connect__message {
+    max-width: 460px;
+    margin: 0 auto 36px;
+    color: rgba(255, 255, 255, 0.55);
+    font-weight: 300;
+    font-size: 16px;
+    line-height: 1.6;
+  }
+
+  .connect__fiverr {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 16px 38px;
+    background: #f7f6f3;
+    color: #1c1c1c;
+    font-family: inherit;
+    font-weight: 600;
+    font-size: 16px;
+    text-decoration: none;
+    border-radius: 999px;
+    box-shadow: 0 1px 0 rgba(255,255,255,0.5) inset, 0 10px 24px -12px rgba(0,0,0,0.5);
+    transition: transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.45s ease;
+  }
+
+  .connect__fiverr:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 1px 0 rgba(255,255,255,0.5) inset,
+      0 16px 32px -14px rgba(0,0,0,0.55),
+      0 0 24px 4px rgba(255,255,255,0.14),
+      0 0 36px 10px rgba(124, 58, 237, 0.22);
+  }
+
+  .connect__socials {
+    margin-top: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .connect__social {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    color: rgba(255, 255, 255, 0.55);
+    text-decoration: none;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s ease, filter 0.3s ease;
+  }
+
+  .connect__social svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .connect__social:hover {
+    color: #fff;
+    transform: translateY(-3px);
+    filter: drop-shadow(0 0 10px rgba(124, 58, 237, 0.55));
+  }
+
+  .connect__social--primary {
+    width: 48px;
+    height: 48px;
+    color: rgba(255, 255, 255, 0.85);
+  }
+
+  .connect__social--primary svg {
+    width: 24px;
+    height: 24px;
+  }
+
+  .connect__social--primary:hover {
+    color: #fff;
+    filter: drop-shadow(0 0 14px rgba(124, 58, 237, 0.65));
+  }
+
+  .connect__social--text {
+    width: auto;
+    height: 44px;
+    padding: 0 6px;
+  }
+
+  .connect__social--text span {
+    font-family: inherit;
+    font-weight: 700;
+    font-size: 16px;
+    letter-spacing: -0.01em;
+  }
+
+  @media (max-width: 480px) {
+    .connect__socials { gap: 22px; }
+  }
+
+  /* ---------- final footer — minimal sign-off ---------- */
+
+  .site-footer {
+    background: #000;
+    text-align: center;
+    padding: 44px 20px 48px;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+  }
+
+  .site-footer__name {
+    margin: 0;
+    color: rgba(255, 255, 255, 0.75);
+    font-weight: 600;
+    font-size: 15px;
+    letter-spacing: -0.01em;
+  }
+
+  .site-footer__tagline {
+    margin: 4px 0 0;
+    color: rgba(255, 255, 255, 0.5);
+    font-weight: 300;
+    font-size: 13px;
+  }
+
+  .site-footer__meta {
+    margin: 18px 0 0;
+    color: rgba(255, 255, 255, 0.36);
+    font-weight: 300;
+    font-size: 11.5px;
+    letter-spacing: 0.02em;
   }
 
   @media (max-width: 680px) {
@@ -403,12 +880,15 @@
 
   @media (prefers-reduced-motion: reduce) {
     .project__grid img,
-    .thumbnails__grid img {
+    .thumbnails__item,
+    .whatido__item,
+    .process__step {
       transition: none;
       opacity: 1;
       transform: none;
     }
-    #hire-now-btn {
+    #hire-now-btn,
+    .connect__fiverr {
       transition: none;
       opacity: 1;
       transform: none;
@@ -416,7 +896,9 @@
     }
     .hero__portrait-wrap,
     .hero__title,
-    .hero__tagline {
+    .hero__tagline,
+    .hero__descriptor,
+    .hero__scroll {
       animation: none;
       opacity: 1;
       transform: none;
@@ -424,6 +906,17 @@
     .hero__portrait-parallax,
     .hero__text {
       transition: none;
+    }
+    .hero__glow {
+      animation: none;
+    }
+    .hero__portrait-spin {
+      animation: none;
+    }
+    .hero__scroll::after {
+      animation: none;
+      top: 12px;
+      opacity: 0.5;
     }
     .section-divider {
       transition: none;
@@ -442,34 +935,56 @@
       opacity: 1;
       transform: none;
     }
+    .whatido__index::after {
+      transition: none;
+      width: 22px;
+    }
+    .scroll-progress {
+      transition: none;
+    }
   }
 </style>
 </head>
 <body>
 
+  <div class="scroll-progress" id="scroll-progress"></div>
+
   <div class="site">
 
-    <!-- Hero: real markup — portrait, name, tagline, Hire now button —
-         so each element can animate independently (staggered entrance,
-         subtle parallax) rather than being baked into one flat image. -->
+    <!-- Hero: portrait, name, tagline, secondary descriptor, Hire now,
+         scroll indicator. Real markup so each piece can animate and
+         parallax independently. -->
     <section class="hero">
+      <div class="hero__glow" aria-hidden="true"></div>
       <div class="hero__portrait-wrap">
         <div class="hero__portrait-parallax" data-parallax="portrait">
+          <div class="hero__portrait-spin" aria-hidden="true"></div>
           <div class="hero__portrait-ring"></div>
-          <img class="hero__portrait" src="portrait.png" alt="Portrait photo, Xavage Designs">
+          <img class="hero__portrait" src="portrait2.png" alt="Portrait photo, Xavage Designs">
         </div>
       </div>
       <div class="hero__text" data-parallax="text">
         <h1 class="hero__title">Xavage Designs</h1>
         <p class="hero__tagline">Creative Designer &amp; Strategist</p>
+        <p class="hero__descriptor">Social Creatives &bull; YouTube Thumbnails &bull; Digital Content</p>
         <button id="hire-now-btn" type="button">Hire now</button>
       </div>
+      <div class="hero__scroll" aria-hidden="true"></div>
     </section>
 
-    <!-- Posters — Selected Poster Designs, shown as a responsive 2-up
-         gallery grid. Add future posters as an <img class="reveal">
-         straight into .project__grid; layout, reveal and hover carry
-         over automatically. Displayed first, ahead of the thumbnails. -->
+    <!-- Selected Work — compact editorial intro, ahead of the poster
+         gallery, per the site's stated visual journey. -->
+    <section class="intro">
+      <div class="section-heading">
+        <div class="section-divider"></div>
+        <p class="section-kicker">Selected Work</p>
+      </div>
+      <p class="intro__blurb">A selection of visual work across branding, digital content and YouTube.</p>
+    </section>
+
+    <!-- Posters — Selected Poster Designs, responsive 2-up gallery grid.
+         Add future posters as an <img class="reveal"> straight into
+         .project__grid; layout, reveal and hover carry over automatically. -->
     <section class="project">
       <div class="section-heading">
         <div class="section-divider"></div>
@@ -477,56 +992,141 @@
         <h2 class="section-title">Selected Poster Designs</h2>
       </div>
       <div class="project__grid">
-        <img class="reveal" src="project-01-logo.jpg" width="1080" height="1080" loading="lazy" alt="Forte Works — brand mark">
-        <img class="reveal" src="project-02-intro.jpg" width="1080" height="1350" loading="lazy" alt="Introducing Forte Works">
-        <img class="reveal" src="project-03-description.jpg" width="1080" height="1350" loading="lazy" alt="Capsule Infinity — a browser extension that lets you save AI conversations as portable capsules">
-        <img class="reveal" src="project-04-title.jpg" width="1080" height="1350" loading="lazy" alt="Capsule Infinity — enhance your browser, extend your world">
-        <img class="reveal" src="project-05-cta.jpg" width="1080" height="1350" loading="lazy" alt="Your conversation, packed into a capsule — Create Capsule">
-        <img class="reveal" src="project-06-guide.jpg" width="1080" height="1350" loading="lazy" alt="Guide to use Capsule Infinity — capture page, new chat, copy and paste">
-        <img class="reveal" src="project-07-crossplatform.jpg" width="1080" height="1350" loading="lazy" alt="Carry your context across Claude, ChatGPT, Gemini, DeepSeek and more">
-        <img class="reveal" src="project-08-chromestore.jpg" width="1080" height="1350" loading="lazy" alt="Use Capsule Infinity — now available on the Chrome Web Store">
+        <img class="reveal" src="poster-01.jpg" width="1080" height="1350" loading="lazy" alt="Introducing Forte Works">
+        <img class="reveal" src="poster-02.jpg" width="1080" height="1350" loading="lazy" alt="Use Capsule Infinity — now available on the Chrome Web Store">
+        <img class="reveal" src="poster-03.jpg" width="1080" height="1350" loading="lazy" alt="Capsule Infinity — a browser extension that lets you save AI conversations as portable capsules">
+        <img class="reveal" src="poster-04.jpg" width="1080" height="1350" loading="lazy" alt="Meet Your Clinic's New Receptionist — Forte Works AI receptionist app">
       </div>
     </section>
 
-    <!-- Thumbnails — the second portfolio collection, laid
-         out to match the original thumbnail-specific reference design
-         exactly: tight 2-column grid, minimal gaps, white background.
-         Add future thumbnails as an <img class="reveal"> straight into
-         .thumbnails__grid; it will inherit spacing, reveal and hover. -->
-    <section class="thumbnails">
+    <!-- What I Do — minimal 3-column, typographic only. -->
+    <section class="whatido">
       <div class="section-heading">
+        <div class="section-divider"></div>
+        <p class="section-kicker">What I Do</p>
+      </div>
+      <div class="whatido__grid">
+        <div class="whatido__item reveal-group">
+          <span class="whatido__index">01</span>
+          <h3>Graphic Design</h3>
+          <p>Social media creatives, posters, campaigns and digital content.</p>
+        </div>
+        <div class="whatido__item reveal-group">
+          <span class="whatido__index">02</span>
+          <h3>YouTube Thumbnails</h3>
+          <p>High-impact thumbnails designed around clarity, curiosity and clicks.</p>
+        </div>
+        <div class="whatido__item reveal-group">
+          <span class="whatido__index">03</span>
+          <h3>Creative Strategy</h3>
+          <p>Visual direction and content thinking to make designs communicate better.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Thumbnails — Designed to stop the scroll. Tight 2-column grid
+         matching the original thumbnail-specific reference design.
+         Add future thumbnails as a .thumbnails__item block. -->
+    <section class="thumbnails">
+      <div class="section-heading thumbnails-intro">
         <div class="section-divider section-divider--dark"></div>
-        <p class="section-kicker section-kicker--dark">Thumbnails</p>
-        <h2 class="section-title section-title--dark">Selected YouTube Thumbnail Designs</h2>
+        <p class="section-kicker section-kicker--dark">YouTube Thumbnails</p>
+        <p class="intro__blurb">Designed to stop the scroll.</p>
       </div>
       <div class="thumbnails__grid">
-        <img class="reveal" src="thumb-01.jpg" width="1920" height="1080" loading="lazy" alt="FIFA World Cup 2026 reaction thumbnail featuring Messi and Lamine Yamal">
-        <img class="reveal" src="thumb-02.jpg" width="1920" height="1080" loading="lazy" alt="Wendy's Meal 99 Minions toy haul thumbnail">
-        <img class="reveal" src="thumb-03.jpg" width="1920" height="1080" loading="lazy" alt="Crumbl Cookies Flamin' Hot Cheetos taste test thumbnail">
-        <img class="reveal" src="thumb-04.jpg" width="1920" height="1080" loading="lazy" alt="Funny dog reaction thumbnail with laughing hosts">
-        <img class="reveal" src="thumb-05.jpg" width="1920" height="1080" loading="lazy" alt="Michael Jackson 55th Grammy Awards thumbnail">
-        <img class="reveal" src="thumb-06.jpg" width="1920" height="1080" loading="lazy" alt="UFC Conor McGregor Rise thumbnail">
-        <img class="reveal" src="thumb-07.jpg" width="1920" height="1080" loading="lazy" alt="Social media side hustle apps reaction thumbnail">
-        <img class="reveal" src="thumb-08.jpg" width="1920" height="1080" loading="lazy" alt="Cristiano Ronaldo Total $100M net worth thumbnail">
-        <img class="reveal" src="thumb-09.jpg" width="1920" height="1080" loading="lazy" alt="9/11 Inside Job or Terrorist Attack conspiracy theory thumbnail">
-        <img class="reveal" src="thumb-10.jpg" width="1080" height="607" loading="lazy" alt="Tupac Shakur They Will Kill Me thumbnail">
+        <span class="thumbnails__item reveal-group"><img src="thumb-01.jpg" width="1920" height="1080" loading="lazy" alt="FIFA World Cup 2026 reaction thumbnail featuring Messi and Lamine Yamal"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-02.jpg" width="1920" height="1080" loading="lazy" alt="Wendy's Meal 99 Minions toy haul thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-03.jpg" width="1920" height="1080" loading="lazy" alt="No Arms No Legs boxing challenge reaction thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-04.jpg" width="1920" height="1080" loading="lazy" alt="9KM London landmarks travel thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-05.jpg" width="1920" height="1080" loading="lazy" alt="Crumbl Cookies Flamin' Hot Cheetos taste test thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-06.jpg" width="1920" height="1080" loading="lazy" alt="Funny dog reaction thumbnail with laughing hosts"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-07.jpg" width="1920" height="1080" loading="lazy" alt="Michael Jackson 55th Grammy Awards thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-08.jpg" width="1920" height="1080" loading="lazy" alt="UFC Conor McGregor Rise thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-09.jpg" width="1920" height="1080" loading="lazy" alt="Social media side hustle apps reaction thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-10.jpg" width="1920" height="1080" loading="lazy" alt="Cristiano Ronaldo Total $100M net worth thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-11.jpg" width="1920" height="1080" loading="lazy" alt="9/11 Inside Job or Terrorist Attack conspiracy theory thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
+        <span class="thumbnails__item reveal-group"><img src="thumb-12.jpg" width="1080" height="607" loading="lazy" alt="Tupac Shakur They Will Kill Me thumbnail"><span class="thumbnails__view">VIEW &#8599;</span></span>
       </div>
     </section>
 
-    <!-- Footer: quote, preserved exactly from the latest source design -->
-    <img class="full-bleed" src="footer.jpg" alt="Every view begins with one decision: the click.">
+    <!-- Design With Purpose — minimal 3-step process. -->
+    <section class="process">
+      <div class="section-heading">
+        <div class="section-divider"></div>
+        <h2 class="section-title section-title--tight">Design With Purpose</h2>
+      </div>
+      <div class="process__grid" style="margin-top:56px;">
+        <div class="process__step reveal-group">
+          <span class="process__num">01 — Understand</span>
+          <h3>What needs to be communicated?</h3>
+        </div>
+        <div class="process__step reveal-group">
+          <span class="process__num">02 — Build</span>
+          <h3>Create the visual direction around the idea.</h3>
+        </div>
+        <div class="process__step reveal-group">
+          <span class="process__num">03 — Refine</span>
+          <h3>Remove what doesn't help. Strengthen what does.</h3>
+        </div>
+      </div>
+    </section>
+
+    <!-- Let's Connect — closing CTA. Fiverr is the primary action;
+         X, Instagram, YouTube and Discord are secondary. -->
+    <section class="connect">
+      <div class="connect__glow" aria-hidden="true"></div>
+      <div class="connect__inner">
+        <div class="section-heading">
+          <div class="section-divider"></div>
+          <h2 class="section-title section-title--tight">Let's Connect</h2>
+        </div>
+        <p class="connect__message" style="margin-top:24px;">Have a project in mind?<br>Let's create something worth looking at.</p>
+        <a class="connect__fiverr" href="https://www.fiverr.com/gfx_axe1/design-professional-youtube-thumbnails?utm_medium=shared&amp;utm_source=copy_link&amp;utm_campaign=gig&amp;utm_term=bd1x1Xa" target="_blank" rel="noopener noreferrer">
+          Hire me on Fiverr <span aria-hidden="true">&#8599;</span>
+        </a>
+        <div class="connect__socials">
+          <a class="connect__social connect__social--primary connect__social--text" href="https://www.fiverr.com/gfx_axe1/design-professional-youtube-thumbnails?utm_medium=shared&amp;utm_source=copy_link&amp;utm_campaign=gig&amp;utm_term=bd1x1Xa" target="_blank" rel="noopener noreferrer" aria-label="Fiverr" title="Fiverr">
+            <span>Fiverr</span>
+          </a>
+          <a class="connect__social" href="https://x.com/Xavage_designs" target="_blank" rel="noopener noreferrer" aria-label="X (Twitter)" title="X">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M4 4l16 16M20 4L4 20" stroke-linecap="round"/></svg>
+          </a>
+          <a class="connect__social" href="https://www.instagram.com/primaxdzns" target="_blank" rel="noopener noreferrer" aria-label="Instagram" title="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3.5" y="3.5" width="17" height="17" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.2" cy="6.8" r="1" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a class="connect__social" href="https://www.youtube.com/@xavage_designs" target="_blank" rel="noopener noreferrer" aria-label="YouTube" title="YouTube">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="2.5" y="5.5" width="19" height="13" rx="4"/><path d="M10.5 9.3v5.4l4.7-2.7-4.7-2.7z" fill="currentColor" stroke="none"/></svg>
+          </a>
+          <a class="connect__social" href="https://discord.gg/8BPnvdeN9" target="_blank" rel="noopener noreferrer" aria-label="Discord" title="Discord">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.317 4.37a19.79 19.79 0 0 0-4.885-1.515.074.074 0 0 0-.079.037c-.21.375-.444.864-.608 1.25a18.27 18.27 0 0 0-5.487 0 12.64 12.64 0 0 0-.617-1.25.077.077 0 0 0-.079-.037A19.74 19.74 0 0 0 3.677 4.37a.07.07 0 0 0-.032.027C.533 9.046-.32 13.58.099 18.057a.082.082 0 0 0 .031.057 19.9 19.9 0 0 0 5.993 3.03.078.078 0 0 0 .084-.028c.462-.63.874-1.295 1.226-1.994a.076.076 0 0 0-.041-.106 13.1 13.1 0 0 1-1.872-.892.077.077 0 0 1-.008-.128c.126-.094.252-.192.372-.291a.074.074 0 0 1 .078-.01c3.928 1.793 8.18 1.793 12.062 0a.074.074 0 0 1 .079.009c.12.099.246.198.373.292a.077.077 0 0 1-.006.127 12.3 12.3 0 0 1-1.873.892.077.077 0 0 0-.041.107c.36.698.772 1.362 1.225 1.993a.076.076 0 0 0 .084.028 19.84 19.84 0 0 0 6.002-3.03.077.077 0 0 0 .032-.054c.5-5.177-.838-9.674-3.549-13.66a.061.061 0 0 0-.031-.03zM8.02 15.33c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.956-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.956 2.418-2.157 2.418zm7.975 0c-1.183 0-2.157-1.085-2.157-2.419 0-1.333.955-2.419 2.157-2.419 1.21 0 2.176 1.096 2.157 2.42 0 1.333-.946 2.418-2.157 2.418z"/></svg>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Final footer — minimal sign-off. -->
+    <footer class="site-footer">
+      <p class="site-footer__name">Xavage Designs</p>
+      <p class="site-footer__tagline">Creative Designer &amp; Strategist</p>
+      <p class="site-footer__meta">&copy; 2026 Xavage Designs &middot; Available for select freelance projects</p>
+    </footer>
 
   </div>
 
   <script>
-    // Fade/slide reveal for gallery images and section headings as they
-    // scroll into view. Images load natively (src + loading="lazy");
-    // this only toggles animation classes, so content never depends on
-    // JS to appear.
+    // Fade/slide reveal for gallery images, section headings and the
+    // new typographic groups (What I Do / thumbnails / process) as they
+    // scroll into view. Content never depends on JS to appear — this
+    // only toggles animation classes.
     (function () {
       var imgs = document.querySelectorAll('img.reveal');
+      var groups = document.querySelectorAll('.reveal-group');
       var headings = document.querySelectorAll('.section-heading');
-      var targets = Array.prototype.slice.call(imgs).concat(Array.prototype.slice.call(headings));
+      var targets = [].concat(
+        Array.prototype.slice.call(imgs),
+        Array.prototype.slice.call(groups),
+        Array.prototype.slice.call(headings)
+      );
 
       if (!('IntersectionObserver' in window)) {
         targets.forEach(function (el) { el.classList.add('in-view'); });
@@ -599,6 +1199,28 @@
         scrollProgress = Math.max(0, Math.min(1, window.scrollY / heroHeight));
         requestTick();
       }, { passive: true });
+    })();
+
+    // Site-wide scroll progress indicator.
+    (function () {
+      var bar = document.getElementById('scroll-progress');
+      if (!bar) return;
+      var ticking = false;
+      function update() {
+        var doc = document.documentElement;
+        var scrollTop = window.scrollY || doc.scrollTop;
+        var height = doc.scrollHeight - doc.clientHeight;
+        var pct = height > 0 ? (scrollTop / height) * 100 : 0;
+        bar.style.width = pct + '%';
+        ticking = false;
+      }
+      window.addEventListener('scroll', function () {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      }, { passive: true });
+      update();
     })();
   </script>
 
